@@ -1,3 +1,4 @@
+import 'package:actividad_emser/home.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Center(child: Text('hola bro')),
+      home: Home(),
     );
   }
 }

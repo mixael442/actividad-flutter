@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-kepz#_$crq1)($*uc3z%z1f*e6)5ahp@exdhjr_4_y(hy5^ni9'
+SECRET_KEY = 'django-insecure-@uhnq+cs88(gj*&g1p4hqhqqdgnwjw-j@)gg==$l4ge9r2x=(%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'actividad.registros'
 ]
 
 MIDDLEWARE = [
@@ -75,8 +77,12 @@ WSGI_APPLICATION = 'actividad.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'actividad',
+        'USER': 'misael',
+        'PASSWORD': 'misael',
+        'HOST': 'localhost',
+        'PORT': '5432'
     }
 }
 
