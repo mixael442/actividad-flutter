@@ -8,7 +8,7 @@ import '../models/model.dart';
 
 class DBUser {
   Future<Database> _openDB() async {
-    return openDatabase(join(await getDatabasesPath(), 'proyecto1.db'),
+    return openDatabase(join(await getDatabasesPath(), 'proyecto2.db'),
         onCreate: (db, version) {
       return db.execute(
           "CREATE TABLE usuariost (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, apellido TEXT, dni INTEGER, fechanacimiento TEXT, sueldomensual INTEGER)");
