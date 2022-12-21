@@ -1,37 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../db/db_proyecto.dart';
 import '../models/model.dart';
 
-class NoteModifyScreen extends StatefulWidget {
-  const NoteModifyScreen({Key? key}) : super(key: key);
-  //const NoteModifyScreen({super.key, required this.userID});
+class NoteUpdateScreen extends StatefulWidget {
+  final Usuarios userID;
+  const NoteUpdateScreen({super.key, required this.userID});
 
   @override
-  State<NoteModifyScreen> createState() => _NoteModifyScreenState();
+  State<NoteUpdateScreen> createState() => _HomeScreenState();
 }
 
-class _NoteModifyScreenState extends State<NoteModifyScreen> {
+class _HomeScreenState extends State<NoteUpdateScreen> {
+  TextEditingController _nombre = TextEditingController();
+  TextEditingController _apellido = TextEditingController();
+  TextEditingController _dni = TextEditingController();
+  TextEditingController _date = TextEditingController();
+  TextEditingController _sueldo = TextEditingController();
+
   DBUser? dbUsers;
   @override
   void initState() {
+    setState(() {
+      _nombre.text = widget.userID.nombre;
+      _apellido.text = widget.userID.apellido;
+      _dni.text = widget.userID.dni.toString();
+      _date.text = widget.userID.fechaNacimiento.toString();
+      _sueldo.text = widget.userID.sueldoMensual.toString();
+    });
     super.initState();
-
     dbUsers = DBUser();
   }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _nombre = TextEditingController();
-    TextEditingController _apellido = TextEditingController();
-    TextEditingController _dni = TextEditingController();
-    TextEditingController _date = TextEditingController();
-    TextEditingController _sueldo = TextEditingController();
     return Scaffold(
       appBar: AppBar(
           // ignore: unnecessary_null_comparison
-          title: const Text('Creacion de Usuario')),
+          title: const Text('Actualizar Usuario')),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
@@ -79,17 +85,18 @@ class _NoteModifyScreenState extends State<NoteModifyScreen> {
                 height: 35,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
                     dbUsers
-                        ?.insert(Usuarios(
+                        ?.updateUsuarios(Usuarios(
+                            id: widget.userID.id,
                             nombre: _nombre.text,
                             apellido: _apellido.text,
                             dni: int.parse(_dni.text),
                             fechaNacimiento: DateTime.parse(_date.text),
                             sueldoMensual: int.parse(_sueldo.text)))
-                        .then((value) => print('agregado exitosamente: $value'))
+                        .then((value) => print('editado exitosamente: $value'))
                         .onError(
                             (error, stackTrace) => print(error.toString()));
+                    Navigator.pop(context);
                   },
                   child: const Text(
                     "Actualizar",

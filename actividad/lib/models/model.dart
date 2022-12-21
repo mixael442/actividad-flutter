@@ -21,10 +21,10 @@ class Usuarios {
         apellido: json["apellido"],
         dni: json["dni"],
         fechaNacimiento: DateTime.parse(json["fechanacimiento"]),
-        sueldoMensual: json["sueldo_mensual"],
+        sueldoMensual: json["sueldomensual"],
       );
 
-  Map<String, dynamic> toMap() => {
+  Map<String, Object?> toMap() => {
         "id": id,
         "nombre": nombre,
         "apellido": apellido,
