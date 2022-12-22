@@ -53,12 +53,12 @@ class _NoteModifyScreenState extends State<NoteModifyScreen> {
             ),
             TextField(
                 controller: _date,
-                //keyboardType: TextInputType.datetime,
+                keyboardType: TextInputType.datetime,
                 onTap: () async {
                   DateTime? calendar = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
+                      firstDate: DateTime(1940),
                       lastDate: DateTime(2050));
 
                   if (calendar != null) {

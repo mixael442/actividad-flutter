@@ -1,3 +1,4 @@
+import 'package:actividad/views/note_search.dart';
 import 'package:flutter/material.dart';
 import '../db/db_proyecto.dart';
 import '../models/model.dart';
@@ -11,12 +12,15 @@ class NoteListScreen extends StatefulWidget {
   State<NoteListScreen> createState() => _NoteListScreenState();
 }
 
-class _NoteListScreenState extends State<NoteListScreen> {
+class _NoteListScreenState extends State<NoteListScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController controller;
   List<Usuarios> users = [];
   @override
   void initState() {
     cargarUsuarios();
     super.initState();
+    controller = TabController(length: 3, vsync: this);
   }
 
   Future cargarUsuarios() async {
@@ -30,15 +34,39 @@ class _NoteListScreenState extends State<NoteListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Usuarios'),
+          title: const Center(child: Text('Usuarios')),
           actions: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.search))
+            IconButton(
+                onPressed: () {
+                  showSearch(context: context, delegate: SearchScreen(users));
+                },
+                icon: const Icon(Icons.search))
           ],
+          bottom: TabBar(
+            tabs: const [
+              Tab(
+                icon: Icon(Icons.home),
+              ),
+              Tab(
+                icon: Icon(Icons.videocam),
+              ),
+              Tab(
+                icon: Icon(Icons.join_inner_rounded),
+              ),
+            ],
+            controller: controller,
+          ),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const NoteModifyScreen()));
+            Navigator.of(context)
+                .push(
+                    MaterialPageRoute(builder: (_) => const NoteModifyScreen()))
+                .then((value) {
+              setState(() {
+                cargarUsuarios();
+              });
+            });
           },
           child: const Icon(Icons.add),
         ),
@@ -64,10 +92,11 @@ class _NoteListScreenState extends State<NoteListScreen> {
                 ),
                 child: ListTile(
                   title: Text(
-                    users[i].nombre,
+                    '${users[i].nombre}, ${users[i].apellido}',
                     style: TextStyle(color: Theme.of(context).primaryColor),
                   ),
-                  subtitle: Text('Nacido en ${users[i].fechaNacimiento} '),
+                  subtitle: Text(
+                      'Nacido en ${users[i].fechaNacimiento.year}-${users[i].fechaNacimiento.month}-${users[i].fechaNacimiento.day} '),
                   onTap: () {
                     Navigator.of(context)
                         .push(MaterialPageRoute(

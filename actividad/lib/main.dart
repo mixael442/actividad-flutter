@@ -20,13 +20,15 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/*class MiApp extends StatelessWidget {
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(initialRoute: "/", routes: {
-      "/": (context) => const NoteListScreen(),
-      "/agregar": (context) => const NoteModifyScreen(),
-      "/editar": (context) =>  const NoteUpdateScreen(),
-    });
+    return const Scaffold(
+      body: Center(
+        child: Text('HomeScreen'),
+      ),
+    );
   }
-}*/
+}
