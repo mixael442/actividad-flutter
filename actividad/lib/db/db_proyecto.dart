@@ -1,67 +1,83 @@
 // ignore: unused_import
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-// ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../models/model.dart';
 
 class DBUser {
-  Future<Database> _openDB() async {
-    return openDatabase(join(await getDatabasesPath(), "proyecto1.db"),
-        onCreate: (db, version) {
-      return db.execute(
-          "CREATE TABLE usuariost (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, apellido TEXT, dni INTEGER, fechanacimiento TEXT, sueldomensual INTEGER)");
-    }, version: 12);
+  DBUser();
+  static final DBUser intance = DBUser._init();
+  static Database? _database;
+  DBUser._init();
+
+  Future<Database> get database async {
+    if (_database != null) return _database!;
+    _database = await _initDB('proyecto.db');
+    return _database!;
+  }
+
+  Future<Database> _initDB(String filePath) async {
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, filePath);
+    return await openDatabase(path, version: 1, onCreate: _onCreateDB);
+  }
+
+  Future _onCreateDB(Database db, int version) async {
+    await db.execute(
+        "CREATE TABLE usuariost (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, apellido TEXT, dni INTEGER, fechanacimiento TEXT, sueldomensual INTEGER)");
+    await db.execute(
+        "CREATE TABLE peliculast (id INTEGER PRIMARY KEY AUTOINCREMENT, pelicula TEXT, recaudacion INTEGER, presupuesto INTEGER, imagen TEXT)");
   }
 
   insert(Usuarios usuarios) async {
-    Database database = await _openDB();
+    Database database = await intance.database;
     return database.insert("usuariost", usuarios.toMap());
   }
 
   Future<List<Usuarios>> getUsuarios() async {
-    Database database = await _openDB();
+    Database database = await intance.database;
     final List<Map<String, dynamic>> queryResult =
         await database.query("usuariost");
     return queryResult.map((e) => Usuarios.fromMap(e)).toList();
   }
 
   Future<int> deleteUsuarios(int id) async {
-    var database = await _openDB();
+    var database = await intance.database;
     return await database.delete("usuariost", where: "id = ?", whereArgs: [id]);
   }
 
-  Future<int> deleteUsuarios1(Usuarios user) async {
-    var database = await _openDB();
-    return await database
-        .delete("usuariost", where: "id = ?", whereArgs: [user.id]);
-  }
-
   Future<int> updateUsuarios(Usuarios user) async {
-    var database = await _openDB();
+    var database = await intance.database;
     return await database.update("usuariost", user.toMap(),
         where: "id = ?", whereArgs: [user.id]);
   }
 
-  /*getUsuarios1() async {
-    Database database = await _openDB();
-    return await database.query("usuariost");
+  //-------Metodos CRUD Peliculas-------//
+
+  insertPeliculas(Peliculas peliculas) async {
+    Database database = await intance.database;
+    return database.insert("peliculast", peliculas.toMap());
   }
 
-  Future<List<Usuarios>> getUsuarios2() async {
-    Database database = await _openDB();
+  Future<List<Peliculas>> getPeliculas() async {
+    Database database = await intance.database;
     final List<Map<String, dynamic>> queryResult =
-        await database.query("usuariost");
-    return List.generate(
-        queryResult.length,
-        (index) => Usuarios(
-            nombre: queryResult[index]["nombre"],
-            apellido: queryResult[index]["apellido"],
-            dni: queryResult[index]["dni"],
-            fechaNacimiento: queryResult[index]["fechanacimiento"],
-            sueldoMensual: queryResult[index]["sueldomensual"]));
-  }*/
+        await database.query("peliculast");
+    return queryResult.map((e) => Peliculas.fromMap(e)).toList();
+  }
 
+  Future<int> deletePeliculas(int id) async {
+    var database = await intance.database;
+    return await database
+        .delete("peliculast", where: "id = ?", whereArgs: [id]);
+  }
+
+  Future<int> updatePeliculas(Peliculas movie) async {
+    var database = await intance.database;
+    return await database.update("peliculast", movie.toMap(),
+        where: "id = ?", whereArgs: [movie.id]);
+  }
 }

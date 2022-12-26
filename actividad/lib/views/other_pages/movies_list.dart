@@ -1,29 +1,29 @@
-import 'package:actividad/views/note_search.dart';
+import 'package:actividad/models/model.dart';
 import 'package:flutter/material.dart';
-import '../db/db_proyecto.dart';
-import '../models/model.dart';
-import 'note_modify.dart';
-import 'note_update.dart';
 
-class NoteListScreen extends StatefulWidget {
-  const NoteListScreen({Key? key}) : super(key: key);
+import '../../db/db_proyecto.dart';
+import 'movies_modify.dart';
+import 'movies_update.dart';
+
+class MoviesListScreen extends StatefulWidget {
+  const MoviesListScreen({Key? key}) : super(key: key);
 
   @override
-  State<NoteListScreen> createState() => _NoteListScreenState();
+  State<MoviesListScreen> createState() => _MoviesListScreenState();
 }
 
-class _NoteListScreenState extends State<NoteListScreen> {
-  List<Usuarios> users = [];
+class _MoviesListScreenState extends State<MoviesListScreen> {
+  List<Peliculas> movies = [];
   @override
   void initState() {
-    cargarUsuarios();
+    cargarPeliculas();
     super.initState();
   }
 
-  Future cargarUsuarios() async {
-    List<Usuarios> usersP = await DBUser().getUsuarios();
+  Future cargarPeliculas() async {
+    List<Peliculas> moviesP = await DBUser().getPeliculas();
     setState(() {
-      users = usersP;
+      movies = moviesP;
     });
   }
 
@@ -31,23 +31,19 @@ class _NoteListScreenState extends State<NoteListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Center(child: Text('Usuarios')),
+          title: const Center(child: Text('Peliculas')),
           actions: [
-            IconButton(
-                onPressed: () {
-                  showSearch(context: context, delegate: SearchScreen(users));
-                },
-                icon: const Icon(Icons.search))
+            IconButton(onPressed: () {}, icon: const Icon(Icons.search))
           ],
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.of(context)
-                .push(
-                    MaterialPageRoute(builder: (_) => const NoteModifyScreen()))
+                .push(MaterialPageRoute(
+                    builder: (_) => const MoviesModifyScreen()))
                 .then((value) {
               setState(() {
-                cargarUsuarios();
+                cargarPeliculas();
               });
             });
           },
@@ -57,15 +53,13 @@ class _NoteListScreenState extends State<NoteListScreen> {
           child: ListView.builder(
             itemBuilder: (context, i) {
               return Dismissible(
-                key: Key(users[i].toString()),
+                key: Key(movies[i].toString()),
                 direction: DismissDirection.startToEnd,
                 onDismissed: (direction) {
-                  DBUser().deleteUsuarios(users[i].id!);
+                  DBUser().deletePeliculas(movies[i].id!);
                   setState(() {
-                    users.remove(users[i]);
-                    setState(() {
-                      cargarUsuarios();
-                    });
+                    movies.remove(movies[i]);
+                    cargarPeliculas();
                   });
                 },
                 background: Container(
@@ -78,18 +72,19 @@ class _NoteListScreenState extends State<NoteListScreen> {
                 ),
                 child: ListTile(
                   title: Text(
-                    '${users[i].nombre}, ${users[i].apellido}',
+                    movies[i].pelicula,
                     style: TextStyle(color: Theme.of(context).primaryColor),
                   ),
                   subtitle: Text(
-                      'Nacido en ${users[i].fechaNacimiento.year}-${users[i].fechaNacimiento.month}-${users[i].fechaNacimiento.day} '),
+                      'Recaudacion: ${movies[i].recaudacion} Presupuesto: ${movies[i].presupuesto} '),
                   onTap: () {
                     Navigator.of(context)
                         .push(MaterialPageRoute(
-                            builder: (_) => NoteUpdateScreen(userID: users[i])))
+                            builder: (_) =>
+                                MoviesUpdateScreen(movieID: movies[i])))
                         .then((value) {
                       setState(() {
-                        cargarUsuarios();
+                        cargarPeliculas();
                       });
                     });
                     //Navigator.pushNamed(context, '/editar',
@@ -98,10 +93,8 @@ class _NoteListScreenState extends State<NoteListScreen> {
                 ),
               );
             },
-            itemCount: users.length,
+            itemCount: movies.length,
           ),
-        )
-        // ignore: dead_code
-        );
+        ));
   }
 }
