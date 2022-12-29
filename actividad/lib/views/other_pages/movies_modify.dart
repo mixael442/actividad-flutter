@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'package:actividad/models/model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../../db/db_proyecto.dart';
 
 class MoviesModifyScreen extends StatefulWidget {
@@ -17,7 +16,7 @@ class MoviesModifyScreen extends StatefulWidget {
 class _MoviesModifyScreenState extends State<MoviesModifyScreen> {
   DBUser? dbUsers;
   File? imagen;
-  late Uint8List bytes;
+  Uint8List? bytes;
   final pick = ImagePicker();
   @override
   void initState() {
@@ -81,13 +80,10 @@ class _MoviesModifyScreenState extends State<MoviesModifyScreen> {
                   onPressed: () {
                     Navigator.of(context).pop();
                     dbUsers?.insertPeliculas(Peliculas(
-                            pelicula: pelicula.text,
-                            recaudacion: int.parse(recaudacion.text),
-                            presupuesto: int.parse(presupuesto.text),
-                            imagen: base64Encode(bytes))
-                        /* .then(
-                            (value) => print('agregado exitosamente: $value')*/
-                        );
+                        pelicula: pelicula.text,
+                        recaudacion: int.parse(recaudacion.text),
+                        presupuesto: int.parse(presupuesto.text),
+                        imagen: bytes));
                   },
                   child: const Text(
                     "Agregar",

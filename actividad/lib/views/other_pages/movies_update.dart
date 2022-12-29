@@ -13,16 +13,17 @@ class MoviesUpdateScreen extends StatefulWidget {
 
 class _MoviesUpdateScreenState extends State<MoviesUpdateScreen> {
   TextEditingController _pelicula = TextEditingController();
-  TextEditingController _recaudacion = TextEditingController();
   TextEditingController _presupuesto = TextEditingController();
+  TextEditingController _recaudacion = TextEditingController();
 
   DBUser? dbUsers;
+
   @override
   void initState() {
     setState(() {
       _pelicula.text = widget.movieID.pelicula;
-      _recaudacion.text = widget.movieID.recaudacion.toString();
       _presupuesto.text = widget.movieID.presupuesto.toString();
+      _recaudacion.text = widget.movieID.recaudacion.toString();
     });
     super.initState();
     dbUsers = DBUser();
@@ -41,14 +42,14 @@ class _MoviesUpdateScreenState extends State<MoviesUpdateScreen> {
               decoration: const InputDecoration(hintText: 'Nombre de pelicula'),
             ),
             TextFormField(
-              controller: _recaudacion,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(hintText: 'Recaudacion'),
-            ),
-            TextFormField(
               controller: _presupuesto,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(hintText: 'Presupuesto'),
+            ),
+            TextFormField(
+              controller: _recaudacion,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(hintText: 'Recaudacion'),
             ),
             Container(height: 16),
             SizedBox(

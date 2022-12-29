@@ -13,28 +13,32 @@ class NoteModifyScreen extends StatefulWidget {
 }
 
 class _NoteModifyScreenState extends State<NoteModifyScreen> {
-  /*late Peliculas pickedMovie;
-  late List<Peliculas> pelicula;
-  lista() {
-    setState(() async {
-      pelicula = await DBUser().getPeliculas();
-    });
-  }*/
-
+  Peliculas pickedMovie =
+      Peliculas(pelicula: '', presupuesto: 0, recaudacion: 0);
+  List<Peliculas> pelicula = [];
   DBUser? dbUsers;
   @override
   void initState() {
     super.initState();
+    lista();
     dbUsers = DBUser();
   }
 
+  lista() async {
+    List<Peliculas> obtener = await DBUser().getPeliculas();
+    setState(() {
+      pelicula = obtener;
+    });
+  }
+
+  TextEditingController _nombre = TextEditingController();
+  TextEditingController _apellido = TextEditingController();
+  TextEditingController _dni = TextEditingController();
+  TextEditingController _date = TextEditingController();
+  TextEditingController _sueldo = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController _nombre = TextEditingController();
-    TextEditingController _apellido = TextEditingController();
-    TextEditingController _dni = TextEditingController();
-    TextEditingController _date = TextEditingController();
-    TextEditingController _sueldo = TextEditingController();
     return Scaffold(
       appBar: AppBar(
           // ignore: unnecessary_null_comparison
@@ -65,7 +69,7 @@ class _NoteModifyScreenState extends State<NoteModifyScreen> {
                   DateTime? calendar = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(1980),
+                      firstDate: DateTime(1940),
                       lastDate: DateTime(2050));
 
                   if (calendar != null) {
@@ -80,19 +84,19 @@ class _NoteModifyScreenState extends State<NoteModifyScreen> {
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(hintText: 'Sueldo Mensual'),
             ),
-            /* DropdownButton<Peliculas>(
+            DropdownButton<Peliculas>(
                 items: pelicula
-                    .map<DropdownMenuItem<Peliculas>>((e) => DropdownMenuItem(
+                    .map((e) => DropdownMenuItem<Peliculas>(
                           value: e,
                           child: Text(e.pelicula),
                         ))
                     .toList(),
+                hint: Text(pickedMovie.pelicula),
                 onChanged: ((value) {
                   setState(() {
                     pickedMovie = value!;
-                    print('Selected Succesful ${value}');
                   });
-                })),*/
+                })),
             Container(height: 16),
             SizedBox(
                 width: double.infinity,
@@ -107,6 +111,7 @@ class _NoteModifyScreenState extends State<NoteModifyScreen> {
                           dni: int.parse(_dni.text),
                           fechaNacimiento: DateTime.parse(_date.text),
                           sueldoMensual: int.parse(_sueldo.text),
+                          peliculafavorita: pickedMovie.id!,
                         ))
                         .then(
                             (value) => print('agregado exitosamente: $value'));

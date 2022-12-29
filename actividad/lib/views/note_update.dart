@@ -26,6 +26,8 @@ class _HomeScreenState extends State<NoteUpdateScreen> {
     ).show(context);
   }
 
+  int pickedMovie = 0;
+  List<Peliculas> pelicula = [];
   TextEditingController _nombre = TextEditingController();
   TextEditingController _apellido = TextEditingController();
   TextEditingController _dni = TextEditingController();
@@ -42,9 +44,18 @@ class _HomeScreenState extends State<NoteUpdateScreen> {
       _dni.text = widget.userID.dni.toString();
       _date.text = widget.userID.fechaNacimiento.toString();
       _sueldo.text = widget.userID.sueldoMensual.toString();
+      pickedMovie = widget.userID.peliculafavorita;
     });
     super.initState();
+    lista();
     dbUsers = DBUser();
+  }
+
+  lista() async {
+    List<Peliculas> obtener = await DBUser().getPeliculas();
+    setState(() {
+      pelicula = obtener;
+    });
   }
 
   @override
@@ -96,6 +107,19 @@ class _HomeScreenState extends State<NoteUpdateScreen> {
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(hintText: 'Sueldo Mensual'),
               ),
+              DropdownButton(
+                  items: pelicula
+                      .map((e) => DropdownMenuItem<Peliculas>(
+                            value: e,
+                            child: Text(e.pelicula),
+                          ))
+                      .toList(),
+                  hint: Text(pickedMovie.toString()),
+                  onChanged: ((value) {
+                    setState(() {
+                      pickedMovie = value!.id!;
+                    });
+                  })),
               ButtonBar(
                 children: [
                   ElevatedButton(
@@ -122,25 +146,8 @@ class _HomeScreenState extends State<NoteUpdateScreen> {
                         });
                       },
                       child: Text('%20')),
-                  ElevatedButton(
-                      onPressed: () {
-                        int numero = int.parse(_sueldo.text) * 12;
-
-                        Flushbar(
-                          duration: Duration(seconds: 3),
-                          message:
-                              'El sueldo anual de ${_nombre.text} es de $numero',
-                          backgroundColor: Colors.black,
-                        ).show(context);
-                      },
-                      child: Text('sueldo anual')),
                 ],
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    calcularEdad();
-                  },
-                  child: Text('Edad')),
               Container(height: 16),
               SizedBox(
                   width: double.infinity,
@@ -155,6 +162,7 @@ class _HomeScreenState extends State<NoteUpdateScreen> {
                             dni: int.parse(_dni.text),
                             fechaNacimiento: DateTime.parse(_date.text),
                             sueldoMensual: int.parse(_sueldo.text),
+                            peliculafavorita: pickedMovie,
                           ))
                           .then(
                               (value) => print('editado exitosamente: $value'));

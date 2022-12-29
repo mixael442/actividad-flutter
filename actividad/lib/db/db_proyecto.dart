@@ -15,7 +15,7 @@ class DBUser {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('proyecto.db');
+    _database = await _initDB('proyecto2.db');
     return _database!;
   }
 
@@ -27,9 +27,20 @@ class DBUser {
 
   Future _onCreateDB(Database db, int version) async {
     await db.execute(
-        "CREATE TABLE usuariost (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, apellido TEXT, dni INTEGER, fechanacimiento TEXT, sueldomensual INTEGER)");
+        "CREATE TABLE usuariost (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, apellido TEXT, dni INTEGER, fechanacimiento TEXT, sueldomensual INTEGER, peliculafavorita INTEGER, FOREIGN KEY (peliculafavorita) REFERENCES peliculast(id))");
     await db.execute(
-        "CREATE TABLE peliculast (id INTEGER PRIMARY KEY AUTOINCREMENT, pelicula TEXT, recaudacion INTEGER, presupuesto INTEGER, imagen TEXT)");
+        "CREATE TABLE peliculast (id INTEGER PRIMARY KEY AUTOINCREMENT, pelicula TEXT, presupuesto INTEGER, recaudacion INTEGER, imagen BLOB)");
+  }
+
+  final String query = """
+    SELECT u.nombre, p.pelicula
+    FROM usuariost u
+    INNER JOIN peliculast p ON u.peliculafavorita = p.id
+""";
+
+  Future<List<Map<String, dynamic>>> getUsuariosYPeliculas() async {
+    final Database? db = await _database;
+    return db!.rawQuery(query);
   }
 
   insert(Usuarios usuarios) async {

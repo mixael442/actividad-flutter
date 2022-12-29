@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:actividad/models/model.dart';
 import 'package:flutter/material.dart';
 
@@ -75,8 +77,8 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                     movies[i].pelicula,
                     style: TextStyle(color: Theme.of(context).primaryColor),
                   ),
-                  subtitle: Text(
-                      'Recaudacion: ${movies[i].recaudacion} Presupuesto: ${movies[i].presupuesto} '),
+                  subtitle: Text(' Presupuesto: ${movies[i].presupuesto} '),
+                  leading: Image(image: MemoryImage(movies[i].imagen!)),
                   onTap: () {
                     Navigator.of(context)
                         .push(MaterialPageRoute(

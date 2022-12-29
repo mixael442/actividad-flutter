@@ -1,4 +1,5 @@
 import 'package:actividad/views/note_search.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import '../db/db_proyecto.dart';
 import '../models/model.dart';
@@ -20,6 +21,18 @@ class _NoteListScreenState extends State<NoteListScreen> {
     super.initState();
   }
 
+  Future calcularEdad(Usuarios date) async {
+    DateTime fecha = DateTime.parse(date.fechaNacimiento.toString());
+    Duration calculado = DateTime.now().difference(fecha);
+    double edad = calculado.inDays / 365;
+
+    Flushbar(
+      duration: const Duration(seconds: 3),
+      message: 'La edad de ${date.nombre} es de ${edad.toInt()} años cumplidos',
+      backgroundColor: Colors.black,
+    ).show(context);
+  }
+
   Future cargarUsuarios() async {
     List<Usuarios> usersP = await DBUser().getUsuarios();
     setState(() {
@@ -35,9 +48,27 @@ class _NoteListScreenState extends State<NoteListScreen> {
           actions: [
             IconButton(
                 onPressed: () {
+                  setState(() {
+                    users.sort(
+                      (a, b) => a.sueldoMensual.compareTo(b.sueldoMensual),
+                    );
+                  });
+                },
+                icon: const Icon(Icons.keyboard_double_arrow_down_outlined)),
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    users.sort(
+                      (a, b) => b.sueldoMensual.compareTo(a.sueldoMensual),
+                    );
+                  });
+                },
+                icon: const Icon(Icons.keyboard_double_arrow_up)),
+            IconButton(
+                onPressed: () {
                   showSearch(context: context, delegate: SearchScreen(users));
                 },
-                icon: const Icon(Icons.search))
+                icon: const Icon(Icons.search)),
           ],
         ),
         floatingActionButton: FloatingActionButton(
@@ -83,6 +114,33 @@ class _NoteListScreenState extends State<NoteListScreen> {
                   ),
                   subtitle: Text(
                       'Nacido en ${users[i].fechaNacimiento.year}-${users[i].fechaNacimiento.month}-${users[i].fechaNacimiento.day} '),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            calcularEdad(users[i]);
+                          },
+                          child: Text('Edad')),
+                      const SizedBox(
+                        width: 3,
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            int numero =
+                                int.parse(users[i].sueldoMensual.toString()) *
+                                    12;
+
+                            Flushbar(
+                              duration: Duration(seconds: 3),
+                              message:
+                                  'El sueldo anual de ${users[i].nombre} es de $numero',
+                              backgroundColor: Colors.black,
+                            ).show(context);
+                          },
+                          child: Text('Sueldo anual')),
+                    ],
+                  ),
                   onTap: () {
                     Navigator.of(context)
                         .push(MaterialPageRoute(
