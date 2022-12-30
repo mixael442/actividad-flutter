@@ -111,7 +111,7 @@ class _NoteModifyScreenState extends State<NoteModifyScreen> {
                           dni: int.parse(_dni.text),
                           fechaNacimiento: DateTime.parse(_date.text),
                           sueldoMensual: int.parse(_sueldo.text),
-                          peliculafavorita: pickedMovie.id!,
+                          peliculafavorita: pickedMovie.id,
                         ))
                         .then(
                             (value) => print('agregado exitosamente: $value'));

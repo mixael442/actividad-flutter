@@ -7,7 +7,7 @@ class Usuarios {
   int dni;
   DateTime fechaNacimiento;
   int sueldoMensual;
-  int peliculafavorita;
+  int? peliculafavorita;
 
   Usuarios(
       {this.id,
@@ -16,7 +16,7 @@ class Usuarios {
       required this.dni,
       required this.fechaNacimiento,
       required this.sueldoMensual,
-      required this.peliculafavorita});
+      this.peliculafavorita});
 
   factory Usuarios.fromMap(Map<String, dynamic> json) => Usuarios(
       id: json["id"],

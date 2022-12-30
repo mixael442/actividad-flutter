@@ -26,7 +26,7 @@ class _HomeScreenState extends State<NoteUpdateScreen> {
     ).show(context);
   }
 
-  int pickedMovie = 0;
+  int? pickedMovie = 0;
   List<Peliculas> pelicula = [];
   TextEditingController _nombre = TextEditingController();
   TextEditingController _apellido = TextEditingController();
@@ -125,27 +125,33 @@ class _HomeScreenState extends State<NoteUpdateScreen> {
                   ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          int numero = int.parse(_sueldo.text) * 10;
+                          double float = 0.10;
+                          int numero =
+                              (int.parse(_sueldo.text) * (1 + float)).round();
                           _sueldo.text = numero.toString();
                         });
                       },
-                      child: Text('%10')),
+                      child: const Text('%10')),
                   ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          int numero = int.parse(_sueldo.text) * 15;
+                          double float = 0.15;
+                          int numero =
+                              (int.parse(_sueldo.text) * (1 + float)).round();
                           _sueldo.text = numero.toString();
                         });
                       },
-                      child: Text('%15')),
+                      child: const Text('%15')),
                   ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          int numero = int.parse(_sueldo.text) * 20;
+                          double float = 0.20;
+                          int numero =
+                              (int.parse(_sueldo.text) * (1 + float)).round();
                           _sueldo.text = numero.toString();
                         });
                       },
-                      child: Text('%20')),
+                      child: const Text('%20')),
                 ],
               ),
               Container(height: 16),
