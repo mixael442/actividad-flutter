@@ -78,7 +78,9 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                     style: TextStyle(color: Theme.of(context).primaryColor),
                   ),
                   subtitle: Text(' Presupuesto: ${movies[i].presupuesto} '),
-                  leading: Image(image: MemoryImage(movies[i].imagen!)),
+                  leading: movies[i].imagen != null
+                      ? Image(image: MemoryImage(movies[i].imagen!))
+                      : null,
                   onTap: () {
                     Navigator.of(context)
                         .push(MaterialPageRoute(
