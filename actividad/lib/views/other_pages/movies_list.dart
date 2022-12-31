@@ -34,9 +34,6 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
     return Scaffold(
         appBar: AppBar(
           title: const Center(child: Text('Peliculas')),
-          actions: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.search))
-          ],
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
