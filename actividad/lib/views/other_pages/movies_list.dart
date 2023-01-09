@@ -4,7 +4,8 @@ import 'package:actividad/models/model.dart';
 import 'package:flutter/material.dart';
 
 import '../../db/db_proyecto.dart';
-import 'movies_modify.dart';
+import '../user_list.dart';
+import 'movies_create.dart';
 import 'movies_update.dart';
 
 class MoviesListScreen extends StatefulWidget {
@@ -32,6 +33,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        drawer: const NavigationDrawer(),
         appBar: AppBar(
           title: const Center(child: Text('Peliculas')),
         ),

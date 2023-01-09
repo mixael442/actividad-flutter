@@ -70,3 +70,15 @@ class Peliculas {
         "imagen": imagen,
       };
 }
+
+class Fotos {
+  int? id;
+  Uint8List? foto;
+
+  Fotos({this.id, this.foto});
+
+  factory Fotos.fromMap(Map<String, dynamic> json) =>
+      Fotos(id: json["id"], foto: json["foto"]);
+
+  Map<String, Object?> toMap() => {"id": id, "foto": foto};
+}

@@ -1,10 +1,16 @@
-import 'package:actividad/views/note_search.dart';
+import 'package:actividad/views/other_pages/movies_list.dart';
+import 'package:actividad/views/user_search.dart';
 import 'package:another_flushbar/flushbar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../db/db_proyecto.dart';
 import '../models/model.dart';
-import 'note_modify.dart';
-import 'note_update.dart';
+import 'other_pages/camera_list.dart';
+import 'other_pages/camera_screen.dart';
+import 'other_pages/join_list.dart';
+import 'other_pages/location_screen.dart';
+import 'user_create.dart';
+import 'user_update.dart';
 
 class NoteListScreen extends StatefulWidget {
   const NoteListScreen({Key? key}) : super(key: key);
@@ -84,6 +90,7 @@ class _NoteListScreenState extends State<NoteListScreen> {
           },
           child: const Icon(Icons.add),
         ),
+        drawer: NavigationDrawer(),
         body: Scrollbar(
           child: ListView.builder(
             itemBuilder: (context, i) {
@@ -162,4 +169,68 @@ class _NoteListScreenState extends State<NoteListScreen> {
         // ignore: dead_code
         );
   }
+}
+
+class NavigationDrawer extends StatelessWidget {
+  const NavigationDrawer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Drawer(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              buildHeader(context),
+              buildMenu(context),
+            ],
+          ),
+        ),
+      );
+
+  Widget buildHeader(BuildContext context) => Container(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+      );
+  Widget buildMenu(BuildContext context) => Container(
+        padding: const EdgeInsets.all(24),
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.man_sharp),
+              title: const Text('Usuarios'),
+              onTap: () => Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => const NoteListScreen())),
+            ),
+            ListTile(
+              leading: const Icon(Icons.movie_creation_outlined),
+              title: const Text('Peliculas'),
+              onTap: () => Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => const MoviesListScreen())),
+            ),
+            ListTile(
+              leading: const Icon(Icons.join_inner),
+              title: const Text('Join'),
+              onTap: () => Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => const JoinListScreen())),
+            ),
+            ListTile(
+              leading: const Icon(Icons.camera),
+              title: const Text('Camara'),
+              onTap: () => Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => const CameraScreen())),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo),
+              title: const Text('Galeria'),
+              onTap: () => Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => const CameraListScreen())),
+            ),
+            ListTile(
+              leading: const Icon(Icons.location_on_outlined),
+              title: const Text('Ubicacion'),
+              onTap: () => Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => const LocationScreen())),
+            ),
+          ],
+        ),
+      );
 }

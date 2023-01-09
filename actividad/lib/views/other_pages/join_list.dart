@@ -3,6 +3,7 @@ import 'package:sqflite/sqflite.dart';
 
 import '../../db/db_proyecto.dart';
 import '../../models/model.dart';
+import '../user_list.dart';
 
 class JoinListScreen extends StatefulWidget {
   const JoinListScreen({Key? key}) : super(key: key);
@@ -31,6 +32,7 @@ class _JoinListScreenState extends State<JoinListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        drawer: const NavigationDrawer(),
         appBar: AppBar(
           title: const Text('Usuarios y sus Peliculas'),
         ),

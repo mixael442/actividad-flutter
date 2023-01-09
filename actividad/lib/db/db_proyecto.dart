@@ -15,7 +15,7 @@ class DBUser {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('proyecto2.db');
+    _database = await _initDB('proyecto5.db');
     return _database!;
   }
 
@@ -30,6 +30,10 @@ class DBUser {
         "CREATE TABLE usuariost (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, apellido TEXT, dni INTEGER, fechanacimiento TEXT, sueldomensual INTEGER, peliculafavorita INTEGER, FOREIGN KEY (peliculafavorita) REFERENCES peliculast(id))");
     await db.execute(
         "CREATE TABLE peliculast (id INTEGER PRIMARY KEY AUTOINCREMENT, pelicula TEXT, presupuesto INTEGER, recaudacion INTEGER, imagen BLOB)");
+    await db.execute(
+        "CREATE TABLE camarat (id INTEGER PRIMARY KEY AUTOINCREMENT, foto BLOB)");
+    await db.execute(
+        "CREATE TABLE localizaciont (id INTEGER PRIMARY KEY AUTOINCREMENT, lat TEXT, long TEXT)");
   }
 
   final String query = """
@@ -90,5 +94,17 @@ class DBUser {
     var database = await intance.database;
     return await database.update("peliculast", movie.toMap(),
         where: "id = ?", whereArgs: [movie.id]);
+  }
+
+  insertFotos(Fotos fotos) async {
+    Database database = await intance.database;
+    return database.insert("camarat", fotos.toMap());
+  }
+
+  Future<List<Fotos>> getFotos() async {
+    Database database = await intance.database;
+    final List<Map<String, dynamic>> queryResult =
+        await database.query("camarat");
+    return queryResult.map((e) => Fotos.fromMap(e)).toList();
   }
 }
