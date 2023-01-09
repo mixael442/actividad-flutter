@@ -76,7 +76,6 @@ class _LocationScreenState extends State<LocationScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                localizacion();
                 obtenerLocalizacion().then((value) {
                   lat = '${value.latitude}';
                   long = '${value.longitude}';
@@ -85,6 +84,7 @@ class _LocationScreenState extends State<LocationScreen> {
                     mensaje = 'Latitude: $lat, Longitude $long';
                   });
                 });
+                localizacion();
               },
               child: const Text('Tu Localizacion'),
             ),
