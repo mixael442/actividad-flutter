@@ -15,7 +15,7 @@ class DBUser {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('proyecto5.db');
+    _database = await _initDB('proyecto1.db');
     return _database!;
   }
 
@@ -106,5 +106,10 @@ class DBUser {
     final List<Map<String, dynamic>> queryResult =
         await database.query("camarat");
     return queryResult.map((e) => Fotos.fromMap(e)).toList();
+  }
+
+  insertLocalizacion(Localizacion localizacion) async {
+    Database database = await intance.database;
+    return database.insert("localizaciont", localizacion.toMap());
   }
 }

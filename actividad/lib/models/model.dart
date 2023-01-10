@@ -82,3 +82,13 @@ class Fotos {
 
   Map<String, Object?> toMap() => {"id": id, "foto": foto};
 }
+
+class Localizacion {
+  int? id;
+  String lat;
+  String long;
+
+  Localizacion({this.id, required this.lat, required this.long});
+
+  Map<String, Object?> toMap() => {"id": id, "lat": lat, "long": long};
+}

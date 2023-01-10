@@ -1,7 +1,9 @@
+import 'package:actividad/models/model.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../db/db_proyecto.dart';
 import '../user_list.dart';
 
 class LocationScreen extends StatefulWidget {
@@ -12,6 +14,13 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
+  DBUser? dbUsers;
+  @override
+  void initState() {
+    super.initState();
+    dbUsers = DBUser();
+  }
+
   String mensaje = 'Current Location of the user';
   String lat = '';
   String long = '';
@@ -23,7 +32,7 @@ class _LocationScreenState extends State<LocationScreen> {
         : throw 'Could not launch $googleURL';
   }
 
-  localizacion() {
+  /*localizacion() {
     LocationSettings locationSettings = const LocationSettings(
       accuracy: LocationAccuracy.high,
       distanceFilter: 100,
@@ -38,7 +47,7 @@ class _LocationScreenState extends State<LocationScreen> {
         mensaje = 'Latitud: $lat,  Longitud: $long';
       });
     });
-  }
+  }*/
 
   Future obtenerLocalizacion() async {
     bool servidor = await Geolocator.isLocationServiceEnabled();
@@ -83,8 +92,12 @@ class _LocationScreenState extends State<LocationScreen> {
                   setState(() {
                     mensaje = 'Latitude: $lat, Longitude $long';
                   });
+                  //localizacion();
+                  if (lat != null && long != null) {
+                    dbUsers!
+                        .insertLocalizacion(Localizacion(lat: lat, long: long));
+                  }
                 });
-                localizacion();
               },
               child: const Text('Tu Localizacion'),
             ),
